@@ -2,7 +2,7 @@
 
 This is a mobile app prototype built with [**Expo**](https://expo.dev/) and [**NativeWind**](https://www.nativewind.dev/) (Tailwind CSS for React Native). It is intended for rapid UI prototyping — no backend or complex business logic.
 
-Create by Team ByteMe:
+Created by Team ByteMe:
 
 - Andrei Mihaescu, 40139389
 - Mark Ghaby, 40201940
@@ -78,10 +78,6 @@ You don’t need to run `npm run android` unless you have Android Studio. Use **
 ### ❌ Error: `expo start --ios` fails
 
 This command is for macOS with Xcode. Use **Expo Go** or run `npm start`.
-
-### ❌ Warning: `Text strings must be rendered within a <Text> component`
-
-Make sure all visible text is wrapped in a `<Text>` component — no raw strings inside `<View>`!
 
 ---
 
