@@ -32,7 +32,7 @@ const HomeScreen = () => {
         </>
       )}
 
-      {showLevel && <LevelPage />}
+      {showLevel && <LevelPage onGoBack={() => setShowLevel(false)} />}
     </View>
   );
 };
