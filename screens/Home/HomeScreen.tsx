@@ -6,13 +6,14 @@ import Account from '../../components/Account';
 import MapView from '../../components/MapView';
 import BottomNav from '../../components/BottomNav';
 import LevelPage from '../../components/LevelPage';
+import RealLifeScenario from '../../components/RealLifeScenario';
 
 const HomeScreen = () => {
-  const [showLevel, setShowLevel] = useState(false);
+  const [screen, setScreen] = useState<'home' | 'level' | 'real'>('home');
 
   return (
     <View className="flex-1 bg-gray-50" style={{ position: 'relative' }}>
-      {!showLevel && (
+      {screen === 'home' && (
         <>
           <View className="absolute top-[40px] z-10 w-full items-center">
             <Header />
@@ -23,7 +24,7 @@ const HomeScreen = () => {
           </View>
 
           <View className="relative flex-1 bg-[#79CA40]">
-            <MapView onStart={() => setShowLevel(true)} />
+            <MapView onStart={() => setScreen('level')} />
           </View>
 
           <View className="absolute bottom-0 z-10 w-full">
@@ -32,7 +33,11 @@ const HomeScreen = () => {
         </>
       )}
 
-      {showLevel && <LevelPage onGoBack={() => setShowLevel(false)} />}
+      {screen === 'level' && (
+        <LevelPage onGoBack={() => setScreen('home')} onNext={() => setScreen('real')} />
+      )}
+
+      {screen === 'real' && <RealLifeScenario />}
     </View>
   );
 };

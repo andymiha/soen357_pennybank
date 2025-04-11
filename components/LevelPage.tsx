@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 
 interface LevelPageProps {
   onGoBack: () => void;
+  onNext: () => void;
 }
 
-const LevelPage = ({ onGoBack }: LevelPageProps) => {
+const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
   const [answerStatus, setAnswerStatus] = useState<'correct' | 'incorrect' | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [coins, setCoins] = useState(5);
@@ -134,19 +135,19 @@ const LevelPage = ({ onGoBack }: LevelPageProps) => {
           </View>
 
           {/* Button */}
-          {answerStatus === 'correct' ? (
-            <TouchableOpacity className="w-[335px] rounded-[10px] bg-[#77C93C] py-[11px] shadow-[0px_4px_0px_0px_#68A62F]">
-              <Text className="font-nunito text-center text-[16px] font-extrabold text-white">
-                CONTINUE
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity className="w-[335px] rounded-[10px] bg-[#B3261E] py-[11px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-              <Text className="font-nunito text-center text-[16px] font-extrabold text-white">
-                Review With Penny Before Continuing
-              </Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            onPress={onNext}
+            className={`w-[335px] rounded-[10px] ${
+              answerStatus === 'correct' ? 'bg-[#77C93C]' : 'bg-[#B3261E]'
+            } py-[11px] ${
+              answerStatus === 'correct'
+                ? 'shadow-[0px_4px_0px_0px_#68A62F]'
+                : 'shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]'
+            }`}>
+            <Text className="font-nunito text-center text-[16px] font-extrabold text-white">
+              {answerStatus === 'correct' ? 'CONTINUE' : 'Review With Penny Before Continuing'}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
