@@ -18,7 +18,8 @@ interface Level {
   incorrectText: string;
 }
 
-// Define two levels with different content
+// Define four levels with different content.
+// Levels 1–3 use 4 answers; level 4 uses 2 answers.
 const levels: Level[] = [
   {
     question: 'Select The Fixed Expense',
@@ -56,10 +57,43 @@ const levels: Level[] = [
     incorrectText:
       'An irregular expense is a cost that doesn’t occur on a regular schedule, like repairs or gifts!',
   },
+  {
+    question: 'Paul pays for skating lessons each month! Is this an Irregular or Fixed cost?',
+    answers: [
+      { label: 'Fixed', image: require('public/images/skatefixed.png'), isCorrect: true },
+      { label: 'Irregular', image: require('public/images/skateirregular.png'), isCorrect: false },
+    ],
+    incorrectText:
+      'For a regular monthly expense like skating lessons, the cost remains consistent and is considered fixed!',
+  },
+  {
+    question:
+      'Jake had to get his car repaired after his car broke down. Is this a Variable or Irregular cost?',
+    answers: [
+      { label: 'Fixed', image: require('public/images/carfixed.png'), isCorrect: false },
+      { label: 'Irregular', image: require('public/images/carrepair.png'), isCorrect: true },
+    ],
+    incorrectText:
+      'A car repair is an irregular cost because it doesn’t happen regularly and is often unexpected!',
+  },
+  {
+    question:
+      'Ella bought a big birthday gift for her best friend. Is this a Variable or Irregular cost?',
+    answers: [
+      { label: 'Fixed', image: require('public/images/birthdayfixed.png'), isCorrect: false },
+      {
+        label: 'Irregular',
+        image: require('public/images/birthdayirregular.png'),
+        isCorrect: true,
+      },
+    ],
+    incorrectText:
+      'A birthday gift is an irregular cost because it happens occasionally and isn’t part of a regular spending pattern!',
+  },
 ];
 
 const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
-  // Current level index, answer states, and coins
+  // State to track current level, answer status, selected answer, and coins.
   const [currentLevel, setCurrentLevel] = useState<number>(0);
   const [answerStatus, setAnswerStatus] = useState<'correct' | 'incorrect' | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -72,18 +106,20 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
     if (answerStatus === null) {
       setSelectedAnswer(label);
       setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
-      if (isCorrect) setCoins((prev) => prev + 1);
+      if (isCorrect) {
+        setCoins((prev) => prev + 1);
+      }
     }
   };
 
   const handleContinue = () => {
     if (currentLevel < levels.length - 1) {
-      // Move to the next level and reset answer state
+      // Proceed to the next level and reset state
       setCurrentLevel((prev) => prev + 1);
       setAnswerStatus(null);
       setSelectedAnswer(null);
     } else {
-      // All levels completed
+      // All levels complete
       onNext();
     }
   };
@@ -95,14 +131,11 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
         <Text className="font-nunito absolute left-1/2 top-[-24px] -translate-x-1/2 text-[16px] font-extrabold text-[#79CA40]">
           PennyBank
         </Text>
-
         <View className="flex-row items-center justify-between px-[20px]">
           <TouchableOpacity onPress={onGoBack}>
             <Image source={require('public/images/x.png')} />
           </TouchableOpacity>
-
           <Image source={require('public/images/progressbar.png')} className="object-contain" />
-
           <View className="flex-row items-center gap-1">
             <Image source={require('public/images/coin.png')} />
             <Text
