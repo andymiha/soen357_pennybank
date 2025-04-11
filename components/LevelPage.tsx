@@ -3,26 +3,88 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 
 interface LevelPageProps {
   onGoBack: () => void;
-  onNext: () => void;
+  onNext: () => void; // called when all levels are complete
 }
 
+interface Answer {
+  label: string;
+  image: any;
+  isCorrect: boolean;
+}
+
+interface Level {
+  question: string;
+  answers: Answer[];
+  incorrectText: string;
+}
+
+// Define two levels with different content
+const levels: Level[] = [
+  {
+    question: 'Select The Fixed Expense',
+    answers: [
+      { label: 'Rent', image: require('public/images/rent.png'), isCorrect: true },
+      { label: 'Phone Bill', image: require('public/images/phonebill.png'), isCorrect: false },
+      { label: 'Food', image: require('public/images/food.png'), isCorrect: false },
+      { label: 'Car Repair', image: require('public/images/carrepair.png'), isCorrect: false },
+    ],
+    incorrectText:
+      'A fixed expense is a cost that occurs each period and the amount doesn’t change!',
+  },
+  {
+    question: 'Select The Variable Expense',
+    answers: [
+      { label: 'Gift', image: require('public/images/gift.png'), isCorrect: false },
+      { label: 'Water Bill', image: require('public/images/waterbills.png'), isCorrect: true },
+      { label: 'Vacation', image: require('public/images/vacation.png'), isCorrect: false },
+      { label: 'Netflix', image: require('public/images/netflix.png'), isCorrect: false },
+    ],
+    incorrectText: 'A variable expense changes over time and its amount can vary each period!',
+  },
+  {
+    question: 'Select The Irregular Expense',
+    answers: [
+      { label: 'Mortgage', image: require('public/images/mortgage.png'), isCorrect: false },
+      { label: 'Groceries', image: require('public/images/groceries.png'), isCorrect: false },
+      { label: 'Car Loan', image: require('public/images/carloan.png'), isCorrect: false },
+      {
+        label: 'Emergency Vet Visit',
+        image: require('public/images/vetvisit.png'),
+        isCorrect: true,
+      },
+    ],
+    incorrectText:
+      'An irregular expense is a cost that doesn’t occur on a regular schedule, like repairs or gifts!',
+  },
+];
+
 const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
+  // Current level index, answer states, and coins
+  const [currentLevel, setCurrentLevel] = useState<number>(0);
   const [answerStatus, setAnswerStatus] = useState<'correct' | 'incorrect' | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [coins, setCoins] = useState(5);
 
-  const answers = [
-    { label: 'Rent', image: require('public/images/rent.png'), isCorrect: true },
-    { label: 'Phone Bill', image: require('public/images/phonebill.png'), isCorrect: false },
-    { label: 'Food', image: require('public/images/food.png'), isCorrect: false },
-    { label: 'Car Repair', image: require('public/images/carrepair.png'), isCorrect: false },
-  ];
+  // Get current level data
+  const level = levels[currentLevel];
 
   const handleAnswer = (label: string, isCorrect: boolean) => {
     if (answerStatus === null) {
       setSelectedAnswer(label);
       setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
       if (isCorrect) setCoins((prev) => prev + 1);
+    }
+  };
+
+  const handleContinue = () => {
+    if (currentLevel < levels.length - 1) {
+      // Move to the next level and reset answer state
+      setCurrentLevel((prev) => prev + 1);
+      setAnswerStatus(null);
+      setSelectedAnswer(null);
+    } else {
+      // All levels completed
+      onNext();
     }
   };
 
@@ -52,7 +114,7 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
         </View>
       </View>
 
-      {/* Question */}
+      {/* Question Section */}
       <View className="mt-10 items-start px-6">
         <View className="mb-2 flex-row items-center gap-2">
           <View className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#A2DB7C] p-[4px]">
@@ -62,17 +124,17 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
             />
           </View>
           <Text className="font-nunito text-[14px] font-extrabold tracking-[-0.56px] text-[#A2DB7C]">
-            NEW CONCEPT
+            NEW CONCEPT - Level {currentLevel + 1}
           </Text>
         </View>
         <Text className="font-nunito text-left text-[24px] font-extrabold text-[#4C4C4C]">
-          Select The Fixed Expense
+          {level.question}
         </Text>
       </View>
 
-      {/* Choice Buttons */}
+      {/* Choice Buttons / Level Body */}
       <View className="flex-1 flex-row flex-wrap justify-center gap-4 px-6 py-10">
-        {answers.map(({ label, image, isCorrect }, index) => {
+        {level.answers.map(({ label, image, isCorrect }, index) => {
           const isSelected = selectedAnswer === label;
           const correct = isCorrect && isSelected;
           const incorrect = !isCorrect && isSelected;
@@ -117,13 +179,11 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
       {/* Chat Bubble Popup for Incorrect Answer */}
       {answerStatus === 'incorrect' && (
         <View className="absolute bottom-[150px] left-6 right-6 z-50 rounded-2xl bg-white p-4 shadow-md">
-          <Text className="text-base font-semibold text-black">
-            A fixed expense is a cost that occurs each period and the amount doesn’t change!
-          </Text>
+          <Text className="text-base font-semibold text-black">{level.incorrectText}</Text>
         </View>
       )}
 
-      {/* Footer */}
+      {/* Footer with Continue Button */}
       {answerStatus && (
         <View
           className={`w-full px-6 py-6 ${answerStatus === 'correct' ? 'bg-[#DFFEBF]' : 'bg-[#F9DEDC]'}`}
@@ -141,10 +201,9 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
               {answerStatus === 'correct' ? 'Amazing!' : 'Incorrect'}
             </Text>
           </View>
-
-          {/* Button */}
+          {/* Continue Button */}
           <TouchableOpacity
-            onPress={onNext}
+            onPress={handleContinue}
             className={`w-[335px] rounded-[10px] ${
               answerStatus === 'correct' ? 'bg-[#77C93C]' : 'bg-[#B3261E]'
             } py-[11px] ${
