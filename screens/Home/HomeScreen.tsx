@@ -37,7 +37,7 @@ const HomeScreen = () => {
         <LevelPage onGoBack={() => setScreen('home')} onNext={() => setScreen('real')} />
       )}
 
-      {screen === 'real' && <RealLifeScenario />}
+      {screen === 'real' && <RealLifeScenario onGoBack={() => setScreen('home')} />}
     </View>
   );
 };

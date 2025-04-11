@@ -27,7 +27,7 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
   };
 
   return (
-    <View className="z-50 flex-1 bg-white">
+    <View className="relative z-50 flex-1 bg-white">
       {/* Header Row */}
       <View className="relative mt-[74px]">
         <Text className="font-nunito absolute left-1/2 top-[-24px] -translate-x-1/2 text-[16px] font-extrabold text-[#79CA40]">
@@ -78,19 +78,16 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
           const incorrect = !isCorrect && isSelected;
 
           const bgColor = correct ? 'bg-[#E2F2FF]' : incorrect ? 'bg-[#F9DEDC]' : 'bg-white';
-
           const borderColor = correct
             ? 'border-[#53ADF0]'
             : incorrect
               ? 'border-[#B3261E]'
               : 'border-[#E5E5E5]';
-
           const shadowColor = correct
             ? 'shadow-[0px_4px_0px_0px_#53ADF0]'
             : incorrect
               ? 'shadow-[0px_4px_0px_0px_#852221]'
               : 'shadow-[0px_4px_0px_0px_#E5E5E5]';
-
           const textColor = correct
             ? 'text-[#53ADF0]'
             : incorrect
@@ -117,7 +114,16 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
         })}
       </View>
 
-      {/* Custom Footer */}
+      {/* Chat Bubble Popup for Incorrect Answer */}
+      {answerStatus === 'incorrect' && (
+        <View className="absolute bottom-[150px] left-6 right-6 z-50 rounded-2xl bg-white p-4 shadow-md">
+          <Text className="text-base font-semibold text-black">
+            A fixed expense is a cost that occurs each period and the amount doesn’t change!
+          </Text>
+        </View>
+      )}
+
+      {/* Footer */}
       {answerStatus && (
         <View
           className={`w-full px-6 py-6 ${answerStatus === 'correct' ? 'bg-[#DFFEBF]' : 'bg-[#F9DEDC]'}`}
@@ -129,7 +135,9 @@ const LevelPage = ({ onGoBack, onNext }: LevelPageProps) => {
               className="h-12 w-12 object-contain"
             />
             <Text
-              className={`font-nunito text-[24px] font-bold ${answerStatus === 'correct' ? 'text-[#6BA52F]' : 'text-[#B3261E]'}`}>
+              className={`font-nunito text-[24px] font-bold ${
+                answerStatus === 'correct' ? 'text-[#6BA52F]' : 'text-[#B3261E]'
+              }`}>
               {answerStatus === 'correct' ? 'Amazing!' : 'Incorrect'}
             </Text>
           </View>
