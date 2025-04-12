@@ -13,7 +13,7 @@ Created by Team ByteMe:
 ---
 
 ## 📸 Demo
-![ScreenRecording_04-11-2025 20-24-34_1 (1)](https://github.com/user-attachments/assets/5fd25b4d-d6c1-418f-ae83-993f0cafcbc6)
+<img src="https://github.com/user-attachments/assets/5fd25b4d-d6c1-418f-ae83-993f0cafcbc6" alt="ScreenRecording" width="300"/>
 
 ---
 
